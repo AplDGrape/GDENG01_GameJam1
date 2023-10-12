@@ -14,8 +14,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isFacingRight = true;
 
     [SerializeField] private Rigidbody2D rb;
+
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+
+    [SerializeField] private Transform ceilingCheck;
+    [SerializeField] private LayerMask ceilingLayer;
 
     //Jetpack
     [SerializeField] private float Jetpack = 5f;
@@ -23,12 +27,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float fuel = 100f;
     [SerializeField] private float fuelBurnRate = 40f;
     [SerializeField] private float fuelRefillRate = 30f;
-    [SerializeField] private float RefillCD = 2f;
+    //[SerializeField] private float RefillCD = 5f;
 
     private bool isFlying = false;
     private bool haveFuel = true;
 
-    private float timer = 0f;
+    //private float timer = 0;
     private float currentFuel;
 
     private void Awake()
@@ -51,6 +55,16 @@ public class PlayerMovement : MonoBehaviour
         //    haveFuel = false;
         //    currentFuel = 0;
         //}
+        //if (!haveFuel)
+        //{
+        //    timer += Time.deltaTime;
+        //    Debug.Log(timer);
+        //    if (timer >= RefillCD)
+        //    {
+        //        haveFuel = true;
+        //        timer = 0;
+        //    }
+        //}
 
         //Use Jetpack
         if (Input.GetButtonDown("Jump") && haveFuel)
@@ -60,20 +74,10 @@ public class PlayerMovement : MonoBehaviour
             //rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
         //While in the air
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f || IsCeiling())
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             isFlying = false;
-        }
-
-        if (!haveFuel)
-        {
-            timer += Time.deltaTime;
-            if (timer >= RefillCD)
-            {
-                haveFuel = true;
-                timer = 0;
-            }
         }
 
         flip();
@@ -105,7 +109,12 @@ public class PlayerMovement : MonoBehaviour
     //Creates a circle below the feet to check if player is grounded
     private bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.05f, groundLayer);
+    }
+
+    private bool IsCeiling()
+    {
+        return Physics2D.OverlapCircle(ceilingCheck.position, 0.05f, ceilingLayer);
     }
 
     private void flip()
