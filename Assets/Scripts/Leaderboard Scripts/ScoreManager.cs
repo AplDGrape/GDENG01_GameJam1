@@ -14,12 +14,12 @@ public class ScoreManager : MonoBehaviour
 
     public IEnumerable<Score> GetHighScores()
     {
-        return sd.scores.OrderByDescending(x => x.score);
+        return sd.scores.OrderByDescending(x => x.score).Take(5);
     }
 
     public void addScore(Score score)
     {
-        sd.scores.Add(score);   
+        sd.scores.Add(score);
     }
 
     private void OnDestroy() {

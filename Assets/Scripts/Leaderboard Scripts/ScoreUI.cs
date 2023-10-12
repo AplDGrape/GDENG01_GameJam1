@@ -10,7 +10,6 @@ public class ScoreUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         var scores = scoreManager.GetHighScores().ToArray();
         for (int i = 0; i < scores.Length; i++) {
             var row = Instantiate(rowUI, transform).GetComponent<RowUI>();
