@@ -10,6 +10,7 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField] private GameObject playerObject;
     [SerializeField] private TMP_Text scoreTextValue;
     [SerializeField] private Animator animator;
+    [SerializeField] private ScoreManager scoreManager;
 
     private bool bPlaying;
 
@@ -32,5 +33,6 @@ public class ScoreSystem : MonoBehaviour
     //call this when pausing or ending the level
     public void StopScoring() {
         bPlaying = false;
+        scoreManager.addScore(new Score(fScore));
     }
 }
