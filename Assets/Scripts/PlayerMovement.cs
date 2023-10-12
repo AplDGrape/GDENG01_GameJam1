@@ -35,6 +35,9 @@ public class PlayerMovement : MonoBehaviour
     //private float timer = 0;
     private float currentFuel;
 
+    //player hearts or lives
+    private PlayerHearts hearts;
+
     private void Awake()
     {
         currentFuel = fuel;
@@ -43,55 +46,57 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal") * speed;
+        if(hearts.IsAlive == true) {
+            horizontal = Input.GetAxisRaw("Horizontal") * speed;
 
-        animator.SetFloat("Speed", Mathf.Abs(horizontal));
+            animator.SetFloat("Speed", Mathf.Abs(horizontal));
 
-        fuelSlider.value = currentFuel / fuel;
+            fuelSlider.value = currentFuel / fuel;
 
-        //Punish using all fuel
-        //if (currentFuel < 0)
-        //{
-        //    haveFuel = false;
-        //    currentFuel = 0;
-        //}
-        //if (!haveFuel)
-        //{
-        //    timer += Time.deltaTime;
-        //    Debug.Log(timer);
-        //    if (timer >= RefillCD)
-        //    {
-        //        haveFuel = true;
-        //        timer = 0;
-        //    }
-        //}
+            //Punish using all fuel
+            //if (currentFuel < 0)
+            //{
+            //    haveFuel = false;
+            //    currentFuel = 0;
+            //}
+            //if (!haveFuel)
+            //{
+            //    timer += Time.deltaTime;
+            //    Debug.Log(timer);
+            //    if (timer >= RefillCD)
+            //    {
+            //        haveFuel = true;
+            //        timer = 0;
+            //    }
+            //}
 
-        //Use Jetpack
-        if (Input.GetButtonDown("Jump") && haveFuel)
-        {
-            isFlying = true;
+            //Use Jetpack
+            if (Input.GetButtonDown("Jump") && haveFuel)
+            {
+                isFlying = true;
 
-            animator.SetBool("isUsingJetpack", true);
+                animator.SetBool("isUsingJetpack", true);
 
-            //Jumping
-            //rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+                //Jumping
+                //rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            }
+            //While in the air
+            if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f || IsCeiling())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+                isFlying = false;
+
+                animator.SetBool("isUsingJetpack", false);
+            }
+            if (IsGrounded())
+            {
+                animator.SetBool("onLanding", true);
+            }
+            else
+                animator.SetBool("onLanding", false);
+
+            flip();
         }
-        //While in the air
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f || IsCeiling())
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-            isFlying = false;
-
-            animator.SetBool("isUsingJetpack", false);
-        }
-        if (IsGrounded())
-        {
-            animator.SetBool("onLanding", true);
-        }
-        else
-            animator.SetBool("onLanding", false);
-
-        flip();
     }
 
     private void FixedUpdate()
