@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(hearts.IsAlive == true) {
+        if(GetComponent<PlayerHearts>().IsAlive == true) {
             horizontal = Input.GetAxisRaw("Horizontal") * speed;
 
             animator.SetFloat("Speed", Mathf.Abs(horizontal));
