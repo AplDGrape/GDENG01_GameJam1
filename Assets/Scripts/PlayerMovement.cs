@@ -70,6 +70,9 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && haveFuel)
         {
             isFlying = true;
+
+            animator.SetBool("isUsingJetpack", true);
+
             //Jumping
             //rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
@@ -78,7 +81,15 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             isFlying = false;
+
+            animator.SetBool("isUsingJetpack", false);
         }
+        if (IsGrounded())
+        {
+            animator.SetBool("onLanding", true);
+        }
+        else
+            animator.SetBool("onLanding", false);
 
         flip();
     }
@@ -106,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
             currentFuel += fuelRefillRate * Time.deltaTime;
         }
     }
+
     //Creates a circle below the feet to check if player is grounded
     private bool IsGrounded()
     {
