@@ -8,6 +8,7 @@ public class ScoreSystem : MonoBehaviour
 {
     [SerializeField] private float fScore;
     [SerializeField] private GameObject playerObject;
+    [SerializeField] private float fCurrentYPos;
     [SerializeField] private TMP_Text scoreTextValue;
     [SerializeField] private Animator animator;
     [SerializeField] private ScoreManager scoreManager;
@@ -25,7 +26,11 @@ public class ScoreSystem : MonoBehaviour
     void Update()
     {
         while(bPlaying == true) {
-            fScore = Mathf.Abs(animator.GetFloat("Speed"));
+            fCurrentYPos = Mathf.Abs(playerObject.transform.position.y);
+            if(fCurrentYPos >= fScore) {
+                fScore = fCurrentYPos;
+            }
+            //fScore = Mathf.Abs(animator.GetFloat("Speed"));
         }
         scoreTextValue.text = fScore.ToString();
     }
